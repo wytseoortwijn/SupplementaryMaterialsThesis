@@ -1,2 +1,2 @@
 # SupplementaryMaterialsThesis
-Supplementary materials accompanying the thesis "Deductive Techniques for Model-Based Concurrency Verification"
+Supplementary materials accompanying the thesis _"Deductive Techniques for Model-Based Concurrency Verification"_.
