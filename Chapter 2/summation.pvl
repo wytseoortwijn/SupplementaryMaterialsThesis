@@ -1,0 +1,20 @@
+// run as `vct --silicon summation.pvl`
+
+class Summation {
+	int sum;
+	
+	invariant A != null;
+	context (\forall* int j; 0 <= j && j < A.length; Perm(A[j], 1/2));
+	context Perm(sum, 1);
+	void summation(int[] A) {
+		invariant inv(Perm(sum, 1)) {
+			par (int tid = 0 .. A.length)
+				context Perm(A[tid], 1/2);
+			{
+				atomic(inv) {
+					sum = sum + A[tid];
+				}
+			}
+		}
+	}
+}

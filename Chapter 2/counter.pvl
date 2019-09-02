@@ -1,0 +1,43 @@
+// run as `vct --silicon counter.pvl`
+
+class Counter {
+	int counter;
+	
+	requires Perm(this.counter, 1);
+	ensures Perm(this.counter, 1);
+	void incr_2_2_1(int n) {
+		counter = counter + n;
+	}
+	
+	requires Perm(this.counter, 1/2) ** Perm(this.counter, 1/2);
+	ensures Perm(this.counter, 1/4) ** Perm(this.counter, 3/4);
+	void incr_2_2_2(int n) {
+		counter = counter + n;
+	}
+	
+	requires Perm(this.counter, 1) ** Perm(this.counter, 1/4);
+	ensures false;
+	void incr_2_2_3(int n) {
+		counter = counter + n;
+	}
+	
+	requires Perm(this.counter, 1);
+	ensures Perm(this.counter, 1);
+	ensures counter == \old(counter) + n;
+	void incr_2_2_4(int n) {
+		counter = counter + n;
+	}
+	
+	requires Perm(this.counter, 1);
+	ensures Perm(this.counter, 1/2);
+	ensures counter == \old(counter) + n;
+	void incr_2_2_5(int n) {
+		counter = counter + n;
+	}
+	
+	requires Perm(this.counter, 1);
+	void incr_2_2_6(int n) {
+		incr_2_2_5(n);
+		incr_2_2_5(n); // verification failure: precondition not satisfied!
+	}
+}

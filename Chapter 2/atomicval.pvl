@@ -1,0 +1,18 @@
+// run as `vct --silicon atomicval.pvl`
+
+class AtomicVal {
+	int val;
+	
+	resource lock_invariant() = Perm(this.val, 1) ** this.val > 0;
+	
+	requires 0 < init;
+	AtomicVal(int init) {
+		val = init;
+	}
+	
+	void atomic_incr() {
+		lock this;
+		val = val + 1;
+		unlock this;
+	}
+}

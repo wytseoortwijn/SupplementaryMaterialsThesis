@@ -1,0 +1,15 @@
+// run as `vct --silicon static_parallelism.pvl`
+
+class Parallelism {
+	invariant A != null;
+	context (\forall* int j; 0 <= j && j < A.length; Perm(A[j], 1));
+	ensures (\forall int j; 0 <= j && j < A.length; A[j] == k);
+	void parfill(int[] A, int k) {
+		par (int tid = 0 .. A.length)
+			context Perm(A[tid], 1);
+			ensures A[tid] == k;
+		{
+			A[tid] = k;
+		}
+	}
+}

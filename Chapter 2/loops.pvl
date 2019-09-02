@@ -1,0 +1,19 @@
+// run as `vct --silicon counter.pvl`
+
+class Loops {
+	context A != null;
+	context (\forall* int j; 0 <= j && j < A.length; Perm(A[j], 1));
+	ensures (\forall int j; 0 <= j && j < A.length; A[j] == k);
+	void fill(int[] A, int k) {
+		int i = 0;
+		
+		loop_invariant A != null;
+		loop_invariant (\forall* int j; 0 <= j && j < A.length; Perm(A[j], 1));
+		loop_invariant 0 <= i && i <= A.length;
+		loop_invariant (\forall int j; 0 <= j && j < i; A[j] == k);
+		while(i < A.length) {
+			A[i] = k;
+			i = i + 1;
+		}
+	}
+}

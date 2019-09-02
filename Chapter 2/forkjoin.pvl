@@ -1,0 +1,36 @@
+// run as `vct --silicon forkjoin.pvl`
+
+class Fib {
+	requires 0 <= n;
+	static pure int fib(int n) = n < 2 ? n : fib(n - 1) + fib(n - 2);
+
+	int input;
+	int output;
+	
+	requires 0 <= N;
+	ensures Perm(input, 1) ** Perm(output, 1);
+	ensures 0 <= input && input == N;
+	Fib(int N) {
+		input = N;
+	}
+	
+	context Perm(input, 1/2) ** Perm(output, 1);
+	context 0 <= input;
+	ensures output == fib(input);
+	void run() {
+		if (input < 2) {
+			output = input;
+		}
+		else {
+			Fib f1 = new Fib(input - 1);
+			Fib f2 = new Fib(input - 2);
+			
+			fork f1;
+			fork f2;
+			join f1;
+			join f2;
+			
+			output = f1.output + f2.output;
+		}
+	}
+}
